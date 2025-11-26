@@ -1,18 +1,173 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>mini-tool</title>
+    <title>Build a Mini Tool - Weather App</title>
     <style>
-        body { font-family: Arial; padding: 20px; }
-        .content { background: white; padding: 20px; border-radius: 10px; }
+        body { font-family: Arial; padding: 20px; max-width: 800px; margin: 0 auto; }
+        .code-block { background: #2d3748; color: white; padding: 20px; border-radius: 8px; margin: 15px 0; }
+        .feature { background: #e6fffa; padding: 15px; border-radius: 8px; margin: 10px 0; }
+        h1 { color: #2d3748; }
+        h2 { color: #4a5568; margin-top: 30px; }
     </style>
 </head>
 <body>
-    <div class="content">
-        <h1>mini-tool</h1>
-        <p>This assignment contains complete solution with code examples and explanations.</p>
-        <p>All requirements have been implemented successfully.</p>
-        <a href="../index.html">← Back to Portfolio</a>
+    <h1>🛠️ Build a Mini Tool - Weather Application</h1>
+    
+    <h2>🌤️ Tool Overview</h2>
+    <p>A command-line weather application that fetches real-time weather data from OpenWeatherMap API and displays it in a user-friendly format.</p>
+
+    <h2>💻 Complete Python Implementation</h2>
+    <div class="code-block">
+        <pre><code>
+import requests
+import json
+
+class WeatherApp:
+    def __init__(self, api_key):
+        self.api_key = api_key
+        self.base_url = "http://api.openweathermap.org/data/2.5/weather"
+    
+    def get_weather(self, city_name, country_code=None):
+        """Fetch current weather for specified city"""
+        try:
+            # Build query parameters
+            query = f"{city_name},{country_code}" if country_code else city_name
+            params = {
+                'q': query,
+                'appid': self.api_key,
+                'units': 'metric',  # Celsius
+                'lang': 'en'
+            }
+            
+            # Make API request
+            response = requests.get(self.base_url, params=params, timeout=10)
+            response.raise_for_status()
+            
+            return self._parse_weather_data(response.json())
+            
+        except requests.exceptions.RequestException as e:
+            return f"❌ Network error: {e}"
+        except ValueError as e:
+            return f"❌ Data parsing error: {e}"
+    
+    def _parse_weather_data(self, data):
+        """Extract and format weather information"""
+        main_info = data['main']
+        weather_info = data['weather'][0]
+        
+        return {
+            'city': data['name'],
+            'country': data['sys']['country'],
+            'temperature': main_info['temp'],
+            'feels_like': main_info['feels_like'],
+            'humidity': main_info['humidity'],
+            'description': weather_info['description'].title(),
+            'pressure': main_info['pressure'],
+            'wind_speed': data['wind']['speed'] if 'wind' in data else 'N/A'
+        }
+    
+    def display_weather(self, weather_data):
+        """Format and display weather information"""
+        if isinstance(weather_data, str):
+            print(weather_data)
+            return
+        
+        print(f"\n{'='*50}")
+        print(f"🌤️  WEATHER REPORT - {weather_data['city']}, {weather_data['country']}")
+        print(f"{'='*50}")
+        print(f"🌡️  Temperature: {weather_data['temperature']}°C")
+        print(f"🤔 Feels like: {weather_data['feels_like']}°C")
+        print(f"💧 Humidity: {weather_data['humidity']}%")
+        print(f"📝 Conditions: {weather_data['description']}")
+        print(f"🌬️  Wind Speed: {weather_data['wind_speed']} m/s")
+        print(f"📊 Pressure: {weather_data['pressure']} hPa")
+        print(f"{'='*50}")
+
+def main():
+    """Main application entry point"""
+    # Note: Replace with actual API key from openweathermap.org
+    API_KEY = "your_actual_api_key_here"
+    
+    app = WeatherApp(API_KEY)
+    
+    print("🌤️  Weather Application")
+    print("Enter 'quit' to exit")
+    
+    while True:
+        try:
+            city = input("\n🏙️  Enter city name: ").strip()
+            
+            if city.lower() == 'quit':
+                print("👋 Goodbye!")
+                break
+            
+            if not city:
+                print("❌ Please enter a valid city name")
+                continue
+            
+            # Optional country code
+            country = input("🌍 Enter country code (optional): ").strip()
+            
+            print("⏳ Fetching weather data...")
+            weather = app.get_weather(city, country if country else None)
+            app.display_weather(weather)
+            
+        except KeyboardInterrupt:
+            print("\n\n👋 Application interrupted. Goodbye!")
+            break
+
+if __name__ == "__main__":
+    # Example usage with demo data
+    print("🚀 Weather App Demo")
+    demo_app = WeatherApp("demo_key")
+    
+    # Simulate successful response
+    demo_data = {
+        'city': 'Stockholm',
+        'country': 'SE',
+        'temperature': 15.5,
+        'feels_like': 14.0,
+        'humidity': 65,
+        'description': 'Partly Cloudy',
+        'wind_speed': 3.2,
+        'pressure': 1012
+    }
+    demo_app.display_weather(demo_data)
+    
+    # Uncomment to run interactive version
+    # main()
+        </code></pre>
     </div>
+
+    <div class="feature">
+        <h3>✨ Features Implemented</h3>
+        <ul>
+            <li>✅ Real-time weather data fetching from API</li>
+            <li>✅ Error handling for network issues</li>
+            <li>✅ User-friendly command-line interface</li>
+            <li>✅ Support for international cities</li>
+            <li>✅ Temperature in Celsius</li>
+            <li>✅ Comprehensive weather information</li>
+        </ul>
+    </div>
+
+    <h2>🔧 Setup Instructions</h2>
+    <ol>
+        <li>Install required package: <code>pip install requests</code></li>
+        <li>Get free API key from: <a href="https://openweathermap.org/api">openweathermap.org/api</a></li>
+        <li>Replace <code>your_actual_api_key_here</code> with your key</li>
+        <li>Run the script: <code>python weather_app.py</code></li>
+    </ol>
+
+    <h2>🎯 Learning Outcomes</h2>
+    <ul>
+        <li>API integration and HTTP requests</li>
+        <li>Error handling in external services</li>
+        <li>Object-oriented programming</li>
+        <li>User input validation</li>
+        <li>Data parsing and formatting</li>
+    </ul>
+
+    <a href="../index.html" style="display: inline-block; margin-top: 20px; padding: 10px 20px; background: #4299e1; color: white; text-decoration: none; border-radius: 5px;">← Back to Portfolio</a>
 </body>
 </html>
