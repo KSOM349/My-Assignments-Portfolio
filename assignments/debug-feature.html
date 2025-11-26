@@ -1,3 +1,31 @@
-# 🐞 Debug a Broken Feature
-
-[المحتوى الكامل للواجب 1...]
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug a Broken Feature</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🐞 Debug a Broken Feature</h1>
+        <h2>Problem: Mathematical Error in Discount Calculation</h2>
+        
+        <h3>Buggy Code:</h3>
+        <pre>
+def calculate_discount(price, discount_percent):
+    discount = price * discount_percent
+    final_price = price - discount
+    return final_price
+        </pre>
+        
+        <h3>Solution:</h3>
+        <pre>
+def calculate_discount(price, discount_percent):
+    discount = price * (discount_percent / 100)
+    final_price = price - discount
+    return final_price
+        </pre>
+        
+        <a href="../index.html">← Back to Portfolio</a>
+    </div>
+</body>
+</html>
