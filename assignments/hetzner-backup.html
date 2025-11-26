@@ -1,18 +1,407 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>hetzner-backup</title>
+    <title>Hetzner Backup Solution</title>
     <style>
-        body { font-family: Arial; padding: 20px; }
-        .content { background: white; padding: 20px; border-radius: 10px; }
+        body { font-family: Arial; padding: 20px; max-width: 900px; margin: 0 auto; }
+        .code-block { background: #2d3748; color: white; padding: 20px; border-radius: 8px; margin: 15px 0; }
+        .step { background: #f0fff4; padding: 15px; border-radius: 8px; margin: 10px 0; border-left: 4px solid #38a169; }
+        .warning { background: #fed7d7; padding: 15px; border-radius: 8px; margin: 10px 0; border-left: 4px solid #e53e3e; }
+        .language-section { border-left: 4px solid #4299e1; padding-left: 15px; margin: 20px 0; }
+        h1 { color: #2d3748; }
+        h2 { color: #4a5568; margin-top: 30px; }
+        .swedish { color: #2b6cb0; }
+        .english { color: #744210; }
     </style>
 </head>
 <body>
-    <div class="content">
-        <h1>hetzner-backup</h1>
-        <p>This assignment contains complete solution with code examples and explanations.</p>
-        <p>All requirements have been implemented successfully.</p>
-        <a href="../index.html">← Back to Portfolio</a>
+    <h1>💾 Task 01 - Hetzner Backup Solution</h1>
+    
+    <div class="language-section">
+        <h3 class="english">🇬🇧 Complete technical procedure for creating alienable backups of Hetzner cloud servers</h3>
+        <h3 class="swedish">🇸🇪 Komplett teknisk procedur för att skapa överförbara säkerhetskopior av Hetzner-molnservrar</h3>
     </div>
+
+    <h2>🎯 Solution Overview / Lösningsöversikt</h2>
+    
+    <div class="language-section">
+        <h3 class="english">🇬🇧 Problem Statement:</h3>
+        <p>Hetzner's native backups are locked to their platform. We need a way to create downloadable server images that can be restored on local VirtualBox instances.</p>
+    </div>
+    
+    <div class="language-section">
+        <h3 class="swedish">🇸🇪 Problembeskrivning:</h3>
+        <p>Hetzners egna säkerhetskopior är låsta till deras plattform. Vi behöver ett sätt att skapa nedladdningsbara serveravbildningar som kan återställas på lokala VirtualBox-instanser.</p>
+    </div>
+
+    <h2>🔧 Complete Backup Script / Komplett Säkerhetskopieringsskript</h2>
+    
+    <div class="code-block">
+        <div class="language-section">
+            <h3 class="english">🇬🇧 Backup Script (run on Hetzner server):</h3>
+            <pre><code>
+#!/bin/bash
+# hetzner-backup.sh
+# Complete server backup solution for Hetzner Cloud
+
+BACKUP_DIR="/backup"
+TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+BACKUP_FILE="hetzner_backup_$TIMESTAMP.img"
+LOG_FILE="$BACKUP_DIR/backup_$TIMESTAMP.log"
+
+echo "🚀 Starting Hetzner server backup - $(date)" | tee -a $LOG_FILE
+
+# Create backup directory
+mkdir -p $BACKUP_DIR
+
+# Check disk space
+AVAILABLE_SPACE=$(df / | awk 'NR==2 {print $4}')
+REQUIRED_SPACE=20000000  # 20GB minimum
+
+if [ $AVAILABLE_SPACE -lt $REQUIRED_SPACE ]; then
+    echo "❌ Error: Insufficient disk space. Need at least 20GB free." | tee -a $LOG_FILE
+    exit 1
+fi
+
+echo "💾 Creating disk image using dd..." | tee -a $LOG_FILE
+
+# Create raw disk image (adjust /dev/sda to your main disk)
+dd if=/dev/sda of=$BACKUP_DIR/$BACKUP_FILE bs=4M status=progress 2>&1 | tee -a $LOG_FILE
+
+# Verify backup was created
+if [ ! -f "$BACKUP_DIR/$BACKUP_FILE" ]; then
+    echo "❌ Error: Backup file was not created" | tee -a $LOG_FILE
+    exit 1
+fi
+
+echo "📦 Compressing backup..." | tee -a $LOG_FILE
+
+# Compress the backup to reduce size
+gzip $BACKUP_DIR/$BACKUP_FILE
+
+# Create checksum for verification
+echo "🔍 Creating verification checksum..." | tee -a $LOG_FILE
+md5sum $BACKUP_DIR/${BACKUP_FILE}.gz > $BACKUP_DIR/${BACKUP_FILE}.gz.md5
+
+# Display backup information
+BACKUP_SIZE=$(du -h $BACKUP_DIR/${BACKUP_FILE}.gz | cut -f1)
+echo "✅ Backup completed successfully!" | tee -a $LOG_FILE
+echo "📁 Backup file: $BACKUP_DIR/${BACKUP_FILE}.gz" | tee -a $LOG_FILE
+echo "💿 Backup size: $BACKUP_SIZE" | tee -a $LOG_FILE
+echo "🔢 MD5 checksum: $(cat $BACKUP_DIR/${BACKUP_FILE}.gz.md5)" | tee -a $LOG_FILE
+
+echo "🎉 Backup process finished - $(date)" | tee -a $LOG_FILE
+            </code></pre>
+        </div>
+        
+        <div class="language-section">
+            <h3 class="swedish">🇸🇪 Säkerhetskopieringsskript (kör på Hetzner-server):</h3>
+            <pre><code>
+#!/bin/bash
+# hetzner-backup.sh
+# Komplett serverbackup-lösning för Hetzner Cloud
+
+BACKUP_DIR="/backup"
+TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+BACKUP_FILE="hetzner_backup_$TIMESTAMP.img"
+LOG_FILE="$BACKUP_DIR/backup_$TIMESTAMP.log"
+
+echo "🚀 Startar Hetzner serverbackup - $(date)" | tee -a $LOG_FILE
+
+# Skapa backup-katalog
+mkdir -p $BACKUP_DIR
+
+# Kontrollera diskutrymme
+LEDIGT_UTRYMME=$(df / | awk 'NR==2 {print $4}')
+KRÄVT_UTRYMME=20000000  # 20GB minimum
+
+if [ $LEDIGT_UTRYMME -lt $KRÄVT_UTRYMME ]; then
+    echo "❌ Fel: Otillräckligt diskutrymme. Behöver minst 20GB ledigt." | tee -a $LOG_FILE
+    exit 1
+fi
+
+echo "💾 Skapar diskavbildning med dd..." | tee -a $LOG_FILE
+
+# Skapa rå diskavbildning (justera /dev/sda till din huvuddisk)
+dd if=/dev/sda of=$BACKUP_DIR/$BACKUP_FILE bs=4M status=progress 2>&1 | tee -a $LOG_FILE
+
+# Verifiera att backup skapades
+if [ ! -f "$BACKUP_DIR/$BACKUP_FILE" ]; then
+    echo "❌ Fel: Backup-filen skapades inte" | tee -a $LOG_FILE
+    exit 1
+fi
+
+echo "📦 Komprimerar backup..." | tee -a $LOG_FILE
+
+# Komprimera backupen för att minska storlek
+gzip $BACKUP_DIR/$BACKUP_FILE
+
+# Skapa checksumma för verifiering
+echo "🔍 Skapar verifierings-checksumma..." | tee -a $LOG_FILE
+md5sum $BACKUP_DIR/${BACKUP_FILE}.gz > $BACKUP_DIR/${BACKUP_FILE}.gz.md5
+
+# Visa backup-information
+BACKUP_STORLEK=$(du -h $BACKUP_DIR/${BACKUP_FILE}.gz | cut -f1)
+echo "✅ Backup slutförd framgångsrikt!" | tee -a $LOG_FILE
+echo "📁 Backup-fil: $BACKUP_DIR/${BACKUP_FILE}.gz" | tee -a $LOG_FILE
+echo "💿 Backup-storlek: $BACKUP_STORLEK" | tee -a $LOG_FILE
+echo "🔢 MD5 checksumma: $(cat $BACKUP_DIR/${BACKUP_FILE}.gz.md5)" | tee -a $LOG_FILE
+
+echo "🎉 Backup-process avslutad - $(date)" | tee -a $LOG_FILE
+            </code></pre>
+        </div>
+    </div>
+
+    <h2>🔄 Restore Script / Återställningsskript</h2>
+    
+    <div class="code-block">
+        <div class="language-section">
+            <h3 class="english">🇬🇧 Restore Script (run on local machine):</h3>
+            <pre><code>
+#!/bin/bash
+# restore-to-virtualbox.sh
+# Restore Hetzner backup to VirtualBox VM
+
+if [ $# -eq 0 ]; then
+    echo "❌ Usage: $0 <backup_file.img.gz>"
+    echo "   Example: $0 hetzner_backup_20241126_0200.img.gz"
+    exit 1
+fi
+
+BACKUP_FILE=$1
+VM_NAME="hetzner-restored-$(date +%Y%m%d)"
+EXTRACTED_IMG="restored_disk.img"
+
+echo "🔄 Restoring Hetzner backup to VirtualBox..."
+
+# Verify backup file exists
+if [ ! -f "$BACKUP_FILE" ]; then
+    echo "❌ Error: Backup file '$BACKUP_FILE' not found"
+    exit 1
+fi
+
+# Verify checksum if available
+if [ -f "${BACKUP_FILE}.md5" ]; then
+    echo "🔍 Verifying backup integrity..."
+    md5sum -c "${BACKUP_FILE}.md5"
+    if [ $? -ne 0 ]; then
+        echo "❌ Error: Backup file verification failed"
+        exit 1
+    fi
+    echo "✅ Backup verification successful"
+fi
+
+echo "📦 Extracting backup file..."
+gunzip -c "$BACKUP_FILE" > "$EXTRACTED_IMG"
+
+echo "🖥️ Creating VirtualBox VM..."
+# Create virtual machine
+VBoxManage createvm --name "$VM_NAME" --ostype "Ubuntu_64" --register
+
+# Create virtual disk
+VBoxManage createmedium disk --filename "$VM_NAME.vdi" --format VDI --variant Fixed
+
+echo "💾 Converting disk image to VirtualBox format..."
+# Convert raw image to VDI format
+VBoxManage convertfromraw "$EXTRACTED_IMG" "$VM_NAME.vdi" --format VDI
+
+echo "⚙️ Configuring VM settings..."
+# Configure VM hardware
+VBoxManage modifyvm "$VM_NAME" --memory 2048 --cpus 2 --acpi on --boot1 disk --boot2 none --boot3 none --boot4 none
+
+# Add storage controller
+VBoxManage storagectl "$VM_NAME" --name "SATA Controller" --add sata --controller IntelAHCI
+
+# Attach disk
+VBoxManage storageattach "$VM_NAME" --storagectl "SATA Controller" --port 0 --device 0 --type hdd --medium "$VM_NAME.vdi"
+
+# Enable network adapter (NAT for internet access)
+VBoxManage modifyvm "$VM_NAME" --nic1 nat
+
+echo "✅ VirtualBox VM created successfully!"
+echo "🖥️ VM Name: $VM_NAME"
+echo "💿 Disk: $VM_NAME.vdi"
+echo "🎯 Start VM with: VBoxManage startvm \"$VM_NAME\""
+
+# Clean up temporary file
+rm -f "$EXTRACTED_IMG"
+
+echo "🚀 Restoration complete! You can now start the VirtualBox VM."
+            </code></pre>
+        </div>
+        
+        <div class="language-section">
+            <h3 class="swedish">🇸🇪 Återställningsskript (kör på lokal maskin):</h3>
+            <pre><code>
+#!/bin/bash
+# restore-to-virtualbox.sh
+# Återställ Hetzner-backup till VirtualBox VM
+
+if [ $# -eq 0 ]; then
+    echo "❌ Användning: $0 <backup_file.img.gz>"
+    echo "   Exempel: $0 hetzner_backup_20241126_0200.img.gz"
+    exit 1
+fi
+
+BACKUP_FILE=$1
+VM_NAME="hetzner-restored-$(date +%Y%m%d)"
+EXTRAHERAD_IMG="restored_disk.img"
+
+echo "🔄 Återställer Hetzner-backup till VirtualBox..."
+
+# Verifiera att backup-filen finns
+if [ ! -f "$BACKUP_FILE" ]; then
+    echo "❌ Fel: Backup-filen '$BACKUP_FILE' hittades inte"
+    exit 1
+fi
+
+# Verifiera checksumma om tillgänglig
+if [ -f "${BACKUP_FILE}.md5" ]; then
+    echo "🔍 Verifierar backup-integritet..."
+    md5sum -c "${BACKUP_FILE}.md5"
+    if [ $? -ne 0 ]; then
+        echo "❌ Fel: Backup-fil verifiering misslyckades"
+        exit 1
+    fi
+    echo "✅ Backup-verifiering lyckades"
+fi
+
+echo "📦 Extraherar backup-fil..."
+gunzip -c "$BACKUP_FILE" > "$EXTRAHERAD_IMG"
+
+echo "🖥️ Skapar VirtualBox VM..."
+# Skapa virtuell maskin
+VBoxManage createvm --name "$VM_NAME" --ostype "Ubuntu_64" --register
+
+# Skapa virtuell disk
+VBoxManage createmedium disk --filename "$VM_NAME.vdi" --format VDI --variant Fixed
+
+echo "💾 Konverterar diskavbildning till VirtualBox-format..."
+# Konvertera rå avbildning till VDI-format
+VBoxManage convertfromraw "$EXTRAHERAD_IMG" "$VM_NAME.vdi" --format VDI
+
+echo "⚙️ Konfigurerar VM-inställningar..."
+# Konfigurera VM-hårdvara
+VBoxManage modifyvm "$VM_NAME" --memory 2048 --cpus 2 --acpi on --boot1 disk --boot2 none --boot3 none --boot4 none
+
+# Lägg till lagringskontroller
+VBoxManage storagectl "$VM_NAME" --name "SATA Controller" --add sata --controller IntelAHCI
+
+# Koppla disk
+VBoxManage storageattach "$VM_NAME" --storagectl "SATA Controller" --port 0 --device 0 --type hdd --medium "$VM_NAME.vdi"
+
+# Aktivera nätverksadapter (NAT för internetåtkomst)
+VBoxManage modifyvm "$VM_NAME" --nic1 nat
+
+echo "✅ VirtualBox VM skapad framgångsrikt!"
+echo "🖥️ VM Namn: $VM_NAME"
+echo "💿 Disk: $VM_NAME.vdi"
+echo "🎯 Starta VM med: VBoxManage startvm \"$VM_NAME\""
+
+# Rensa temporär fil
+rm -f "$EXTRAHERAD_IMG"
+
+echo "🚀 Återställning slutförd! Du kan nu starta VirtualBox VM."
+            </code></pre>
+        </div>
+    </div>
+
+    <h2>📋 Step-by-Step Guide / Steg-för-steg Guide</h2>
+    
+    <div class="step">
+        <h3 class="english">🇬🇧 Step 1: Create Backup on Hetzner Server</h3>
+        <ol>
+            <li>SSH into your Hetzner server: <code>ssh root@your-server-ip</code></li>
+            <li>Download the backup script: <code>wget https://raw.githubusercontent.com/your-repo/hetzner-backup.sh</code></li>
+            <li>Make it executable: <code>chmod +x hetzner-backup.sh</code></li>
+            <li>Run the backup: <code>./hetzner-backup.sh</code></li>
+            <li>Wait for completion (this may take 30-60 minutes)</li>
+        </ol>
+        
+        <h3 class="swedish">🇸🇪 Steg 1: Skapa Backup på Hetzner Server</h3>
+        <ol>
+            <li>SSH in i din Hetzner-server: <code>ssh root@din-server-ip</code></li>
+            <li>Ladda ner backup-skriptet: <code>wget https://raw.githubusercontent.com/ditt-repo/hetzner-backup.sh</code></li>
+            <li>Gör den körbar: <code>chmod +x hetzner-backup.sh</code></li>
+            <li>Kör backupen: <code>./hetzner-backup.sh</code></li>
+            <li>Vänta på slutförande (kan ta 30-60 minuter)</li>
+        </ol>
+    </div>
+
+    <div class="step">
+        <h3 class="english">🇬🇧 Step 2: Download Backup File</h3>
+        <ol>
+            <li>Use SCP to download: <code>scp root@your-server-ip:/backup/*.img.gz .</code></li>
+            <li>Also download the checksum file: <code>scp root@your-server-ip:/backup/*.md5 .</code></li>
+            <li>Verify file integrity: <code>md5sum -c *.md5</code></li>
+        </ol>
+        
+        <h3 class="swedish">🇸🇪 Steg 2: Ladda Ner Backup-fil</h3>
+        <ol>
+            <li>Använd SCP för att ladda ner: <code>scp root@din-server-ip:/backup/*.img.gz .</code></li>
+            <li>Ladda ner även checksumma-filen: <code>scp root@din-server-ip:/backup/*.md5 .</code></li>
+            <li>Verifiera filintegritet: <code>md5sum -c *.md5</code></li>
+        </ol>
+    </div>
+
+    <div class="step">
+        <h3 class="english">🇬🇧 Step 3: Restore to VirtualBox</h3>
+        <ol>
+            <li>Ensure VirtualBox is installed on your local machine</li>
+            <li>Download the restore script</li>
+            <li>Run: <code>./restore-to-virtualbox.sh your-backup-file.img.gz</code></li>
+            <li>Start the VM: <code>VBoxManage startvm "hetzner-restored-20241126"</code></li>
+        </ol>
+        
+        <h3 class="swedish">🇸🇪 Steg 3: Återställ till VirtualBox</h3>
+        <ol>
+            <li>Se till att VirtualBox är installerat på din lokala maskin</li>
+            <li>Ladda ner återställningsskriptet</li>
+            <li>Kör: <code>./restore-to-virtualbox.sh din-backup-fil.img.gz</code></li>
+            <li>Starta VM: <code>VBoxManage startvm "hetzner-restored-20241126"</code></li>
+        </ol>
+    </div>
+
+    <div class="warning">
+        <h3 class="english">🇬🇧 ⚠️ Important Notes:</h3>
+        <ul>
+            <li>Backup files can be very large (10GB+)</li>
+            <li>Ensure you have enough disk space on both Hetzner server and local machine</li>
+            <li>The backup process will temporarily increase server load</li>
+            <li>Test the restoration process before relying on it for production</li>
+        </ul>
+        
+        <h3 class="swedish">🇸🇪 ⚠️ Viktiga Anmärkningar:</h3>
+        <ul>
+            <li>Backup-filer kan vara mycket stora (10GB+)</li>
+            <li>Se till att du har tillräckligt med diskutrymme på både Hetzner-server och lokal maskin</li>
+            <li>Backup-processen kommer temporärt öka serverbelastningen</li>
+            <li>Testa återställningsprocessen innan du litar på den för produktion</li>
+        </ul>
+    </div>
+
+    <h2>🎓 Technical Learning / Tekniskt Lärande</h2>
+    
+    <div class="language-section">
+        <h3 class="english">🇬🇧 Skills Developed:</h3>
+        <ul>
+            <li>Disk imaging and backup strategies</li>
+            <li>Linux system administration</li>
+            <li>VirtualBox VM management</li>
+            <li>Bash scripting and automation</li>
+            <li>Cross-platform compatibility solutions</li>
+        </ul>
+        
+        <h3 class="swedish">🇸🇪 Utvecklade Färdigheter:</h3>
+        <ul>
+            <li>Diskavbildning och backup-strategier</li>
+            <li>Linux-systemadministration</li>
+            <li>VirtualBox VM-hantering</li>
+            <li>Bash-skriptning och automatisering</li>
+            <li>Lösningar för plattformsoberoende kompatibilitet</li>
+        </ul>
+    </div>
+
+    <a href="../index.html" style="display: inline-block; margin-top: 20px; padding: 10px 20px; background: #4299e1; color: white; text-decoration: none; border-radius: 5px;">← Back to Portfolio / Tillbaka till Portfolio</a>
 </body>
 </html>
