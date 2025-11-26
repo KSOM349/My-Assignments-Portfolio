@@ -1,36 +1,7 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Graph Algorithms</title>
-    <style>
-        body { font-family: Arial; padding: 20px; }
-        .code { background: #f5f5f5; padding: 15px; margin: 10px 0; }
-    </style>
-</head>
-<body>
-    <h1>📊 Task 02 - Graph Algorithms</h1>
-    
-    <div class="code">
-        <h3>Dijkstra Algorithm:</h3>
-        <pre>
+<h1>📊 Graph Algorithms</h1>
+<p>خوارزمية ديكسترا لإيجاد أقصر مسار</p>
+<pre>
 def dijkstra(graph, start):
-    distances = {node: float('infinity') for node in graph}
-    distances[start] = 0
-    priority_queue = [(0, start)]
-    
-    while priority_queue:
-        current_distance, current_node = heapq.heappop(priority_queue)
-        
-        for neighbor, weight in graph[current_node].items():
-            distance = current_distance + weight
-            if distance < distances[neighbor]:
-                distances[neighbor] = distance
-                heapq.heappush(priority_queue, (distance, neighbor))
-    
-    return distances
-        </pre>
-    </div>
-
-    <a href="../index.html">← Back to Portfolio</a>
-</body>
-</html>
+    return shortest_paths
+</pre>
+<a href="../index.html">← رجوع</a>
