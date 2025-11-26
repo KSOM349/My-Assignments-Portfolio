@@ -1,18 +1,68 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>debug-feature</title>
+    <title>Debug a Broken Feature</title>
     <style>
-        body { font-family: Arial; padding: 20px; }
-        .content { background: white; padding: 20px; border-radius: 10px; }
+        body { font-family: Arial; padding: 20px; max-width: 800px; margin: 0 auto; }
+        .code-block { background: #2d3748; color: white; padding: 20px; border-radius: 8px; margin: 15px 0; }
+        .bug { border-left: 4px solid #e53e3e; }
+        .fixed { border-left: 4px solid #38a169; }
+        h1 { color: #2d3748; }
+        h2 { color: #4a5568; margin-top: 30px; }
     </style>
 </head>
 <body>
-    <div class="content">
-        <h1>debug-feature</h1>
-        <p>This assignment contains complete solution with code examples and explanations.</p>
-        <p>All requirements have been implemented successfully.</p>
-        <a href="../index.html">← Back to Portfolio</a>
+    <h1>🐞 Debug a Broken Feature</h1>
+    
+    <h2>📝 Problem Description</h2>
+    <p>A discount calculation function contains mathematical errors that produce incorrect results when calculating final prices after discounts.</p>
+    
+    <h2>🐛 Buggy Code</h2>
+    <div class="code-block bug">
+        <pre><code>
+def calculate_discount(price, discount_percent):
+    # ❌ BUG: Incorrect percentage calculation
+    discount = price * discount_percent
+    final_price = price - discount
+    return final_price
+
+# Test cases demonstrating the bug
+print(calculate_discount(100, 20))   # Expected: 80.0, Actual: -1900.0
+print(calculate_discount(50, 10))    # Expected: 45.0, Actual: -450.0
+        </code></pre>
     </div>
+
+    <h2>🔍 Debugging Process</h2>
+    <ol>
+        <li><strong>Identify the Issue:</strong> The function treats discount_percent as a multiplier instead of percentage</li>
+        <li><strong>Root Cause:</strong> Missing division by 100 to convert percentage to decimal</li>
+        <li><strong>Impact:</strong> Results in dramatically incorrect prices</li>
+    </ol>
+
+    <h2>✅ Fixed Solution</h2>
+    <div class="code-block fixed">
+        <pre><code>
+def calculate_discount(price, discount_percent):
+    # ✅ FIX: Convert percentage to decimal
+    discount = price * (discount_percent / 100)
+    final_price = price - discount
+    return final_price
+
+# Test cases - now working correctly
+print(calculate_discount(100, 20))   # Result: 80.0 ✓
+print(calculate_discount(50, 10))    # Result: 45.0 ✓
+print(calculate_discount(200, 15))   # Result: 170.0 ✓
+        </code></pre>
+    </div>
+
+    <h2>💡 Learning Outcomes</h2>
+    <ul>
+        <li>Always validate percentage calculations</li>
+        <li>Use test cases to verify expected behavior</li>
+        <li>Understand the difference between percentages and decimals</li>
+        <li>Systematic debugging approach</li>
+    </ul>
+
+    <a href="../index.html" style="display: inline-block; margin-top: 20px; padding: 10px 20px; background: #4299e1; color: white; text-decoration: none; border-radius: 5px;">← Back to Portfolio</a>
 </body>
 </html>
