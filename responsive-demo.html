@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Responsive Demo</title>
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        .container { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 20px; 
+        }
+        @media (min-width: 768px) {
+            .container { flex-direction: row; }
+        }
+        .column { 
+            background: #f0f0f0; 
+            padding: 20px; 
+            border-radius: 10px; 
+        }
+    </style>
+</head>
+<body>
+    <h1>Responsive Two Columns</h1>
+    <div class="container">
+        <div class="column">
+            <h3>Column 1</h3>
+            <p>Resize browser to see responsive effect</p>
+        </div>
+        <div class="column">
+            <h3>Column 2</h3>
+            <p>Changes to side-by-side on desktop</p>
+        </div>
+    </div>
+</body>
+</html>
