@@ -2,30 +2,41 @@
 <html>
 <head>
     <title>Debug a Broken Feature</title>
-    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        .code { background: #f5f5f5; padding: 15px; margin: 10px 0; }
+        .bug { border-left: 4px solid red; }
+        .fixed { border-left: 4px solid green; }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <h1>🐞 Debug a Broken Feature</h1>
-        <h2>Problem: Mathematical Error in Discount Calculation</h2>
-        
+    <h1>🐞 Debug a Broken Feature</h1>
+    <h2>Problem: Discount Calculation Error</h2>
+    
+    <div class="code bug">
         <h3>Buggy Code:</h3>
         <pre>
 def calculate_discount(price, discount_percent):
     discount = price * discount_percent
     final_price = price - discount
     return final_price
+
+print(calculate_discount(100, 20))  # Expected: 80, Actual: -1900
         </pre>
-        
-        <h3>Solution:</h3>
+    </div>
+
+    <div class="code fixed">
+        <h3>Fixed Code:</h3>
         <pre>
 def calculate_discount(price, discount_percent):
     discount = price * (discount_percent / 100)
     final_price = price - discount
     return final_price
+
+print(calculate_discount(100, 20))  # Result: 80.0
         </pre>
-        
-        <a href="../index.html">← Back to Portfolio</a>
     </div>
+
+    <a href="../index.html">← Back to Portfolio</a>
 </body>
 </html>
