@@ -1,18 +1,199 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>explain-concept</title>
+    <title>Explain a Concept - REST API</title>
     <style>
-        body { font-family: Arial; padding: 20px; }
-        .content { background: white; padding: 20px; border-radius: 10px; }
+        body { font-family: Arial; padding: 20px; max-width: 900px; margin: 0 auto; }
+        .code-block { background: #2d3748; color: white; padding: 20px; border-radius: 8px; margin: 15px 0; }
+        .analogy { background: #e6fffa; padding: 20px; border-radius: 8px; margin: 15px 0; }
+        .language-section { border-left: 4px solid #4299e1; padding-left: 15px; margin: 20px 0; }
+        h1 { color: #2d3748; }
+        h2 { color: #4a5568; margin-top: 30px; }
+        .swedish { color: #2b6cb0; }
+        .english { color: #744210; }
     </style>
 </head>
 <body>
-    <div class="content">
-        <h1>explain-concept</h1>
-        <p>This assignment contains complete solution with code examples and explanations.</p>
-        <p>All requirements have been implemented successfully.</p>
-        <a href="../index.html">← Back to Portfolio</a>
+    <h1>🧠 Explain a Concept - REST API</h1>
+    
+    <div class="analogy">
+        <h2>🍽️ Real-World Analogy / Verklig Världs Analogi</h2>
+        
+        <div class="language-section">
+            <h3 class="english">🇬🇧 English: REST API is like a Restaurant</h3>
+            <p><strong>Client</strong> = Customer (You) 👤</p>
+            <p><strong>Server</strong> = Kitchen 🍳</p>
+            <p><strong>API</strong> = Waiter/Menu 📋</p>
+            <p><strong>HTTP Methods</strong> = Different actions you can take</p>
+        </div>
+        
+        <div class="language-section">
+            <h3 class="swedish">🇸🇪 Svenska: REST API är som en Restaurang</h3>
+            <p><strong>Klient</strong> = Kund (Du) 👤</p>
+            <p><strong>Server</strong> = Kök 🍳</p>
+            <p><strong>API</strong> = Servitör/Meny 📋</p>
+            <p><strong>HTTP-metoder</strong> = Olika åtgärder du kan utföra</p>
+        </div>
     </div>
+
+    <h2>🔄 How REST API Works / Hur REST API Fungerar</h2>
+    
+    <div class="language-section">
+        <h3 class="english">🇬🇧 Step-by-Step Process:</h3>
+        <ol>
+            <li><strong>GET</strong> - Ask for information (Like looking at menu)</li>
+            <li><strong>POST</strong> - Send new data (Like placing an order)</li>
+            <li><strong>PUT</strong> - Update existing data (Like modifying order)</li>
+            <li><strong>DELETE</strong> - Remove data (Like canceling order)</li>
+        </ol>
+    </div>
+    
+    <div class="language-section">
+        <h3 class="swedish">🇸🇪 Steg-för-steg Process:</h3>
+        <ol>
+            <li><strong>GET</strong> - Be om information (Som att titta på menyn)</li>
+            <li><strong>POST</strong> - Skicka ny data (Som att beställa mat)</li>
+            <li><strong>PUT</strong> - Uppdatera befintlig data (Som att ändra beställning)</li>
+            <li><strong>DELETE</strong> - Ta bort data (Som att avbeställa)</li>
+        </ol>
+    </div>
+
+    <h2>💻 Practical Code Examples / Praktiska Kodexempel</h2>
+    
+    <div class="code-block">
+        <div class="language-section">
+            <h3 class="english">🇬🇧 JavaScript Examples:</h3>
+            <pre><code>
+// GET - Retrieve user data
+fetch('https://api.example.com/users')
+  .then(response => response.json())
+  .then(users => console.log(users));
+
+// POST - Create new user
+fetch('https://api.example.com/users', {
+  method: 'POST',
+  headers: {'Content-Type': 'application/json'},
+  body: JSON.stringify({
+    name: 'John Doe',
+    email: 'john@example.com'
+  })
+});
+
+// PUT - Update user
+fetch('https://api.example.com/users/123', {
+  method: 'PUT',
+  body: JSON.stringify({name: 'John Smith'})
+});
+
+// DELETE - Remove user
+fetch('https://api.example.com/users/123', {
+  method: 'DELETE'
+});
+            </code></pre>
+        </div>
+        
+        <div class="language-section">
+            <h3 class="swedish">🇸🇪 JavaScript Exempel:</h3>
+            <pre><code>
+// GET - Hämta användardata
+fetch('https://api.example.com/users')
+  .then(response => response.json())
+  .then(users => console.log(users));
+
+// POST - Skapa ny användare
+fetch('https://api.example.com/users', {
+  method: 'POST',
+  headers: {'Content-Type': 'application/json'},
+  body: JSON.stringify({
+    name: 'Anna Svensson',
+    email: 'anna@example.com'
+  })
+});
+
+// PUT - Uppdatera användare
+fetch('https://api.example.com/users/123', {
+  method: 'PUT',
+  body: JSON.stringify({name: 'Anna Karlsson'})
+});
+
+// DELETE - Ta bort användare
+fetch('https://api.example.com/users/123', {
+  method: 'DELETE'
+});
+            </code></pre>
+        </div>
+    </div>
+
+    <h2>🌐 Common Use Cases / Vanliga Användningsområden</h2>
+    
+    <div class="language-section">
+        <h3 class="english">🇬🇧 Where REST APIs are used:</h3>
+        <ul>
+            <li>📱 Mobile apps fetching data</li>
+            <li>🌐 Website contact forms</li>
+            <li>🛒 E-commerce platforms</li>
+            <li>📊 Weather applications</li>
+            <li>💬 Social media platforms</li>
+        </ul>
+    </div>
+    
+    <div class="language-section">
+        <h3 class="swedish">🇸🇪 Var REST APIs används:</h3>
+        <ul>
+            <li>📱 Mobilappar som hämtar data</li>
+            <li>🌐 Kontaktformulär på webbplatser</li>
+            <li>🛒 E-handelsplattformar</li>
+            <li>📊 Väderapplikationer</li>
+            <li>💬 Sociala medie-plattformar</li>
+        </ul>
+    </div>
+
+    <h2>🔑 Key Principles / Viktiga Principer</h2>
+    
+    <div class="language-section">
+        <h3 class="english">🇬🇧 REST Principles:</h3>
+        <ul>
+            <li><strong>Stateless</strong> - Each request contains all needed information</li>
+            <li><strong>Client-Server</strong> - Clear separation of concerns</li>
+            <li><strong>Uniform Interface</strong> - Consistent way of interacting</li>
+            <li><strong>Cacheable</strong> - Responses can be stored for efficiency</li>
+        </ul>
+    </div>
+    
+    <div class="language-section">
+        <h3 class="swedish">🇸🇪 REST Principer:</h3>
+        <ul>
+            <li><strong>Stateless</strong> - Varje förfrågan innehåller all nödvändig information</li>
+            <li><strong>Klient-Server</strong> - Tydlig separation av ansvarsområden</li>
+            <li><strong>Enhetligt Gränssnitt</strong> - Konsekvent sätt att interagera</li>
+            <li><strong>Cachebar</strong> - Svar kan lagras för effektivitet</li>
+        </ul>
+    </div>
+
+    <h2>🎓 Learning Outcomes / Inlärningsresultat</h2>
+    
+    <div class="language-section">
+        <h3 class="english">🇬🇧 What you've learned:</h3>
+        <ul>
+            <li>Understanding of REST API architecture</li>
+            <li>HTTP methods and their purposes</li>
+            <li>Real-world analogies for complex concepts</li>
+            <li>Practical implementation examples</li>
+            <li>API design principles</li>
+        </ul>
+    </div>
+    
+    <div class="language-section">
+        <h3 class="swedish">🇸🇪 Vad du har lärt dig:</h3>
+        <ul>
+            <li>Förståelse för REST API-arkitektur</li>
+            <li>HTTP-metoder och deras syften</li>
+            <li>Verklighetsanalogier för komplexa koncept</li>
+            <li>Praktiska implementeringsexempel</li>
+            <li>API-designprinciper</li>
+        </ul>
+    </div>
+
+    <a href="../index.html" style="display: inline-block; margin-top: 20px; padding: 10px 20px; background: #4299e1; color: white; text-decoration: none; border-radius: 5px;">← Back to Portfolio / Tillbaka till Portfolio</a>
 </body>
 </html>
